@@ -1,0 +1,9 @@
+services:
+  app:
+    image: ${IMAGE_URL}
+    container_name: ${PACKAGE_NAME}
+    ports:
+      - "8866:3000"
+    environment:
+      ENVIRONMENT: ${ENVIRONMENT}
+    restart: on-failure:5
