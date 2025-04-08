@@ -16,7 +16,7 @@ This project uses GitHub Actions for CI/CD. The workflow is defined in `.github/
 
 The workflow is triggered on commits to the `main` branch. A container is built and pushed to the repository.
 
-Currently this only keeps the latest build of the application and remove previous versions. I do this personally so that I don't exceed GitHub storage quotas.
+Currently this only keeps the latest build of the application and remove previous versions. I do this personally so that I don't exceed GitHub storage quotas in private repositories.
 
 When redeploying the application, the latest build is forcably pulled from the repository. This is done to ensure that the latest version of the application is always deployed.
 
