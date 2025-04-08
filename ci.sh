@@ -4,6 +4,8 @@ set -eu -o pipefail
 
 git pull
 
+DEPLOY_FAILED=false
+
 ./deploy.sh || DEPLOY_FAILED=true
 
 REPO_URL="$(git config --get remote.origin.url)"
