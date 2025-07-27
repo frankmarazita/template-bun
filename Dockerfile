@@ -2,7 +2,7 @@
 
 # use the official Bun image
 # see all versions at https://hub.docker.com/r/oven/bun/tags
-FROM oven/bun:1.2.9 AS base
+FROM oven/bun:1.2.19 AS base
 WORKDIR /usr/src/app
 
 # install dependencies into temp directory
@@ -23,10 +23,9 @@ FROM base AS prerelease
 COPY --from=install /temp/dev/node_modules node_modules
 COPY . .
 
-# [optional] tests & build
-# ENV NODE_ENV=production
-# RUN bun test
-# RUN bun run build
+# tests
+ENV NODE_ENV=production
+RUN bun test
 
 # copy production dependencies and source code into final image
 FROM base AS release
