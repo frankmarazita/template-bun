@@ -2,28 +2,25 @@
 
 A template for creating a Bun TypeScript project in my personal style.
 
-It has my custom CI/CD setup and containerization for easy deployment.
+It has CI/CD with type checking, formatting, tests, and containerization for easy deployment.
+
+### Setup
+
+Rename the `name` property in `package.json` to match your project name. This is used by the local `docker_build` and `docker_run` scripts.
+
+Copy `.env.example` to `.env` and fill in the required values.
 
 ### Local Development
 
-_Ensure to rename the `name` property in `package.json` to your project name, this should also match the repo name. This is important for the CI/CD pipeline._
+- `bun dev` - Start the development server with watch mode
+- `bun test` - Run tests
+- `bun run format` - Format code with Prettier
 
-`bun dev` - Starts the development server.
+### CI/CD
 
-### GitHub Actions
+GitHub Actions workflow at `.github/workflows/ci.yml` runs on pushes to `main`:
 
-This project uses GitHub Actions for CI/CD. The workflow is defined in `.github/workflows/ci.yml`.
+1. **Check** - Type checks (`tsc --noEmit`), format validation, and tests
+2. **Build & Push** - Builds and pushes a Docker image to GitHub Container Registry, tagged with both `latest` and the short commit SHA
 
-The workflow is triggered on commits to the `main` branch. A container is built and pushed to the repository.
-
-Currently this only keeps the latest build of the application and remove previous versions. I do this personally so that I don't exceed GitHub storage quotas in private repositories.
-
-When redeploying the application, the latest build is forcably pulled from the repository. This is done to ensure that the latest version of the application is always deployed.
-
-### Production
-
-The production environment is set up to use the container built in the CI/CD pipeline. The container is deployed to a server using Docker Compose.
-
-The `ci.sh` script runs git pull to ensure that the latest version of the code is pulled from the repository. It then runs `deploy.sh` to deploy the container.
-
-A webhook is set up to trigger the deployment when a new container is pushed to the repository.
+Only the latest and one previous tagged version are kept to avoid exceeding GitHub storage quotas.
