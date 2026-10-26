@@ -1,7 +1,8 @@
-import { ENV } from "./src/env";
-import { app } from "./src/server";
-
 import * as Sentry from "@sentry/bun";
+import { env } from "./src/env";
+import { createServer } from "./src/server";
+
+const ENV = env();
 
 Sentry.init({
   environment: ENV.ENVIRONMENT,
@@ -9,14 +10,16 @@ Sentry.init({
   tracesSampleRate: 1.0,
 });
 
-app.listen(3000, () => {
-  console.log("Server running on port:", 3000);
-});
+const server = createServer({ port: ENV.PORT });
 
-function exitHandler() {
-  console.log("Exiting...");
-  process.exit();
+console.log(`Server running on ${server.url}`);
+
+async function shutdown() {
+  console.log("Shutting down...");
+  await server.stop();
+  await Sentry.close(2000);
+  process.exit(0);
 }
 
-process.on("SIGINT", exitHandler);
-process.on("SIGTERM", exitHandler);
+process.on("SIGINT", shutdown);
+process.on("SIGTERM", shutdown);

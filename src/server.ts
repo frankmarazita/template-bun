@@ -1,12 +1,16 @@
-import bodyParser from "body-parser";
-import express from "express";
+export interface ServerOptions {
+  port: number;
+}
 
-const app = express();
-
-app.use(bodyParser.json());
-
-app.get("/", (req, res) => {
-  res.sendStatus(200);
-});
-
-export { app };
+export function createServer(options: ServerOptions) {
+  return Bun.serve({
+    port: options.port,
+    routes: {
+      "/": new Response("OK"),
+      "/health": Response.json({ status: "ok" }),
+    },
+    fetch() {
+      return new Response("Not Found", { status: 404 });
+    },
+  });
+}

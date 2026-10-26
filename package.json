@@ -15,14 +15,11 @@
   },
   "devDependencies": {
     "@types/bun": "^1.4.4",
-    "@types/express": "^5.0.6",
     "prettier": "^3.9.10",
     "typescript": "^7.0.2"
   },
   "dependencies": {
     "@sentry/bun": "^11.9.0",
-    "body-parser": "^2.4.0",
-    "express": "^5.3.0",
     "zod": "^4.6.7"
   }
 }
