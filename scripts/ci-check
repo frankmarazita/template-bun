@@ -7,4 +7,4 @@ cd "$ROOT"
 bun install --frozen-lockfile
 bun run typecheck
 bun run format:check
-bun test
+bun run test

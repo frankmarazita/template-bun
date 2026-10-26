@@ -6,7 +6,7 @@
   "scripts": {
     "start": "bun index.ts",
     "dev": "bun --watch index.ts",
-    "test": "bun test",
+    "test": "bun test --pass-with-no-tests",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

@@ -5,7 +5,7 @@ Keep this file up to date with the latest architecture and practices of the proj
 ## Usage
 
 - `bun dev` runs the server with watch mode, `bun start` without
-- `bun test`, `bun run typecheck`, `bun run format`
+- `bun run test`, `bun run typecheck`, `bun run format`
 - `scripts/ci-check` runs everything CI checks, the GitHub workflow only calls it
 - `bun run docker_build` and `bun run docker_run` build and run the image locally with `.env`
 - `http/` is a Bruno collection for the API, `bru run --env local` from that folder

@@ -15,7 +15,7 @@ The Bun version is pinned by `packageManager` in `package.json`; keep the Docker
 ### Local Development
 
 - `bun dev` - Start the development server with watch mode
-- `bun test` - Run tests
+- `bun run test` - Run tests
 - `bun run typecheck` - Type check
 - `bun run format` - Format code with Prettier
 - `scripts/ci-check` - Run the same checks as CI
