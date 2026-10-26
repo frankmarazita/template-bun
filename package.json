@@ -11,7 +11,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "docker_build": "docker build --pull -t $npm_package_name .",
-    "docker_run": "docker run --env-file .env -d -p 3000:3000 --name $npm_package_name $npm_package_name"
+    "docker_run": "docker run --env-file .env -e PORT=3000 -p 3000:3000 -d --name $npm_package_name $npm_package_name"
   },
   "devDependencies": {
     "@types/bun": "^1.4.4",
