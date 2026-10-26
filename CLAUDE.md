@@ -1,31 +1,68 @@
-# Template Bun
+# Project Setup Guide
 
-Keep this file up to date with the latest architecture and practices of the project.
+## Project Overview
 
-## Usage
+This is a Bun TypeScript project using `Bun.serve`, featuring CI/CD pipeline, containerization, and Sentry error tracking.
 
-- `bun dev` runs the server with watch mode, `bun start` without
-- `bun run test`, `bun run typecheck`, `bun run format`
-- `scripts/ci-check` runs everything CI checks, the GitHub workflow only calls it
-- `bun run docker_build` and `bun run docker_run` build and run the image locally with `.env`
-- `http/` is a Bruno collection for the API, `bru run --env local` from that folder
+## Technology Stack
 
-## Setup
+- **Runtime**: Bun
+- **Server**: `Bun.serve` with TypeScript
+- **Validation**: Zod for environment variables
+- **Monitoring**: Sentry for error tracking
+- **Containerization**: Docker
+- **CI/CD**: GitHub Actions
 
-- Rename `name` in `package.json` to the repo name, the local Docker scripts use it
-- Copy `.env.example` to `.env`
-- The Bun version is pinned once by `packageManager` in `package.json`, which CI reads through `setup-bun`'s `bun-version-file`. The Dockerfile's `FROM oven/bun:<version>` must match it, and the same version should be used locally
+## Development Commands
 
-## Architecture
+- `bun dev` - Start development server with watch mode
+- `bun start` - Start production server
+- `bun run test` - Run tests
+- `bun run typecheck` - Type check
+- `bun run format` - Format code with Prettier
+- `bun run format:check` - Check code formatting
+- `scripts/ci-check` - Run the same checks as CI
+- `bun docker_build` - Build Docker image
+- `bun docker_run` - Run Docker container
 
-- `index.ts` is the entry point: it reads the environment, starts Sentry, starts the server and stops it on SIGINT/SIGTERM
-- `src/server.ts` creates the `Bun.serve` server, routes live in its `routes` table
-- `src/env.ts` validates the environment with zod
-- Pushes to `main` build the image and push it to the GitHub Container Registry tagged `latest` and the short commit SHA, keeping only the latest and one previous tagged version
+## Project Structure (This may change)
 
-## Practices
+- `index.ts` - Main application entry point
+- `src/env.ts` - Environment configuration with Zod validation
+- `src/server.ts` - `Bun.serve` server setup
+- `scripts/ci-check` - Checks run by CI
+- `http/` - Bruno collection for the API
 
-- Use Bun APIs (`Bun.serve`, `Bun.file`, `bun:sqlite`, `bun:test`) over Node packages that do the same
-- Environment variables are read only through `env()` in `src/env.ts`, where an empty value counts as unset. Add new variables to its schema and to `.env.example`
-- Tests live next to the source as `*.test.ts` and start real servers on port `0`, never a fixed port
-- Keep code self documenting, comment only what can't be
+## Environment Variables
+
+- This can be set in a `.env` file or directly in the environment
+- There is a .env.example file to guide you on required variables
+
+## Important Setup Notes
+
+- **MUST** rename the `name` property in `package.json` to match your project/repo name, the local Docker scripts use it
+- The Bun version is pinned by `packageManager` in `package.json`, which CI reads. Keep the Dockerfile's `FROM oven/bun:<version>` on the same version
+- The CI/CD pipeline builds and pushes containers to GitHub Container Registry
+- Production deployment uses webhook triggers for automatic updates
+- Only keeps the latest and one previous container build to save storage space
+
+## Development Best Practices
+
+- **Type Checking**: Uses TypeScript strict mode - run `bun run typecheck` to verify types
+- **Formatting**: Uses Prettier for code formatting - run `bun run format:check` before committing
+- **Testing**: Always run `bun run test` before committing changes
+- **Code Quality**: Ensure type safety, run linting, and test coverage before pushing
+
+## Type Checking & Formatting
+
+- Uses TypeScript strict mode
+- Uses Prettier for consistent code formatting
+- Run `bun run typecheck` for type checking before committing
+- Run `bun run format:check` for formatting validation before committing
+
+## Testing
+
+- Test framework: Bun's built-in test runner
+- Run tests with `bun run test`
+- Write tests for new features and bug fixes
+- Ensure all tests pass before committing
