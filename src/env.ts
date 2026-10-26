@@ -6,7 +6,7 @@ export enum Environment {
 }
 
 const EnvSchema = z.object({
-  ENVIRONMENT: z.enum(Environment).default(Environment.Development),
+  ENVIRONMENT: z.enum(Environment).default(Environment.Production),
   PORT: z.coerce.number().int().min(0).max(65535).default(3000),
   SENTRY_DSN: z.string().optional(),
 });
