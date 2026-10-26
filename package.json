@@ -2,27 +2,27 @@
   "name": "template-bun",
   "module": "index.ts",
   "type": "module",
+  "packageManager": "bun@1.4.4",
   "scripts": {
     "start": "bun index.ts",
     "dev": "bun --watch index.ts",
     "test": "bun test",
+    "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "docker_build": "docker build --pull -t $npm_package_name .",
     "docker_run": "docker run --env-file .env -d $npm_package_name --name $npm_package_name"
   },
   "devDependencies": {
-    "@types/bun": "latest",
+    "@types/bun": "^1.4.4",
     "@types/express": "^5.0.6",
-    "prettier": "^3.9.6"
-  },
-  "peerDependencies": {
+    "prettier": "^3.9.10",
     "typescript": "^7.0.2"
   },
   "dependencies": {
-    "@sentry/bun": "^10.68.0",
-    "body-parser": "^2.3.0",
-    "express": "^5.2.1",
-    "zod": "^4.4.3"
+    "@sentry/bun": "^11.9.0",
+    "body-parser": "^2.4.0",
+    "express": "^5.3.0",
+    "zod": "^4.6.7"
   }
 }
