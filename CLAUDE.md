@@ -1,66 +1,31 @@
-# Project Setup Guide
+# Template Bun
 
-## Project Overview
+Keep this file up to date with the latest architecture and practices of the project.
 
-This is a Bun TypeScript project with Express.js, featuring CI/CD pipeline, containerization, and Sentry error tracking.
+## Usage
 
-## Technology Stack
+- `bun dev` runs the server with watch mode, `bun start` without
+- `bun test`, `bun run typecheck`, `bun run format`
+- `scripts/ci-check` runs everything CI checks, the GitHub workflow only calls it
+- `bun run docker_build` and `bun run docker_run` build and run the image locally with `.env`
+- `http/` is a Bruno collection for the API, `bru run --env local` from that folder
 
-- **Runtime**: Bun
-- **Framework**: Express.js with TypeScript
-- **Validation**: Zod for environment variables
-- **Monitoring**: Sentry for error tracking
-- **Containerization**: Docker with Docker Compose
-- **CI/CD**: GitHub Actions
+## Setup
 
-## Development Commands
+- Rename `name` in `package.json` to the repo name, the local Docker scripts use it
+- Copy `.env.example` to `.env`
+- The Bun version is pinned once by `packageManager` in `package.json`, which CI reads through `setup-bun`'s `bun-version-file`. The Dockerfile's `FROM oven/bun:<version>` must match it, and the same version should be used locally
 
-- `bun dev` - Start development server with watch mode
-- `bun start` - Start production server
-- `bun test` - Run tests
-- `bun run format` - Format code with Prettier
-- `bun run format:check` - Check code formatting
-- `bun docker_build` - Build Docker image
-- `bun docker_run` - Run Docker container
+## Architecture
 
-## Project Structure (This may change)
+- `index.ts` is the entry point: it reads the environment, starts Sentry, starts the server and stops it on SIGINT/SIGTERM
+- `src/server.ts` creates the `Bun.serve` server, routes live in its `routes` table
+- `src/env.ts` validates the environment with zod
+- Pushes to `main` build the image and push it to the GitHub Container Registry tagged `latest` and the short commit SHA, keeping only the latest and one previous tagged version
 
-- `index.ts` - Main application entry point
-- `src/env.ts` - Environment configuration with Zod validation
-- `src/server.ts` - Express server setup
-- `ci.sh` - CI deployment script
-- `deploy.sh` - Production deployment script
-- `docker-compose.yml` - Docker Compose configuration
+## Practices
 
-## Environment Variables
-
-- This can be set in a `.env` file or directly in the environment
-- There is a .env.example file to guide you on required variables
-
-## Important Setup Notes
-
-- **MUST** rename the `name` property in `package.json` to match your project/repo name for CI/CD to work properly
-- The CI/CD pipeline builds and pushes containers to GitHub Container Registry
-- Production deployment uses webhook triggers for automatic updates
-- Only keeps latest container build to save storage space
-
-## Development Best Practices
-
-- **Type Checking**: Uses TypeScript strict mode - run `bunx tsc --noEmit` to verify types
-- **Formatting**: Uses Prettier for code formatting - run `bun run format:check` before committing
-- **Testing**: Always run `bun test` before committing changes
-- **Code Quality**: Ensure type safety, run linting, and test coverage before pushing
-
-## Type Checking & Formatting
-
-- Uses TypeScript strict mode
-- Uses Prettier for consistent code formatting
-- Run `bunx tsc --noEmit` for type checking before committing
-- Run `bun run format:check` for formatting validation before committing
-
-## Testing
-
-- Test framework: Bun's built-in test runner
-- Run tests with `bun test`
-- Write tests for new features and bug fixes
-- Ensure all tests pass before committing
+- Use Bun APIs (`Bun.serve`, `Bun.file`, `bun:sqlite`, `bun:test`) over Node packages that do the same
+- Environment variables are read only through `env()` in `src/env.ts`, where an empty value counts as unset. Add new variables to its schema and to `.env.example`
+- Tests live next to the source as `*.test.ts` and start real servers on port `0`, never a fixed port
+- Keep code self documenting, comment only what can't be

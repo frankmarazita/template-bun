@@ -13,3 +13,8 @@ helm-charts
 .editorconfig
 .idea
 coverage*
+.github
+.claude
+http
+scripts
+TODO.md
